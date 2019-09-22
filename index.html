@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK6VFCgTXh4jwm6a-ctuJ9RMvqTd2nHBg&libraries=places"></script>
+</head>
+<body>
+    <div id="map"></div>    
+    <div class = "navbar">
+        <h1 id = "casa">Casa</h1>
+    </div>
+    <style>
+        #casa{
+            text-align: center; 
+        }
+    </style>
+    <div id = "places">
+        <h1 id = "">Places Near Me</h1>
+        <p id = "addresses"></p>
+        <button onclick = "buttonClick()" id = "next"> NEXT </button>
+    </div>
+    <div class = "card">
+        <div class="slideshow-container">
+            <div class="mySlidesfade">
+              <img src="https://p.rdcpix.com/v02/l1eef1344-m0xd-w640_h480_q80.jpg" style="width:100%">
+            </div>
+            <div class="mySlidesfade">
+              <img src="https://photos.zillowstatic.com/p_e/ISa9hc3e0fbzot1000000000.jpg" style="width:100%">
+            </div>
+            <!-- Next and previous buttons -->
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+          </div>
+        <div id = "card_text">
+            <h1 class = "text">318 Highland Road</h1>
+            <p class = "text">Ithaca, New York, 14853</p>
+            <p>Ithaca is a city on Cayuga Lake, in New York’s Finger Lakes region. It’s home to Cornell University and its I.M. Pei–designed Herbert F. Johnson Museum of Art. The sprawling Cornell Botanic Gardens includes an arboretum and multi-tiered Cascadilla Falls. Other waterfalls in the area include Ithaca Falls, near downtown. Southwest, Buttermilk Falls and Robert H. Treman state parks offer wooded gorges and natural pools.</p>
+            <p id = "inequality"> </p>
+        </div>
+        <div id = "swipe">
+            <img id = "no" src="https://i.ibb.co/Px5HNJW/tinder-no-button.png" alt="" srcset="" width="15%" height="auto" onclick="onNo()"> 
+            <img id = "yes" src="https://i.ibb.co/7yxzRZ0/tinder-love-button.png" alt="" width="15%" height="auto" onclick="onYes()">
+        </div>
+        <div id = "info">
+                <p>House Details: </p> 
+                <p>Year Built: 1975 </p>
+                <p> Size: 10760 Sq Ft. </p>
+                <p>Link: https://usrealtyrecords.com/results</p>
+            </div>
+    </div>
+</body>
+<style>
+    #info{
+        text-align: center; 
+        visibility: hidden; 
+    }
+    #inequality{
+        border-radius: 50%;
+    }
+    #next{
+        visibility: hidden; 
+        background-color:gray; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        left: 50%
+    }
+    .card{
+        visibility:hidden; 
+    }
+    #addresses{
+        text-align: center;
+    }
+    #places{
+        text-align: center; 
+    }
+    #places h1{
+        text-align: center; 
+    }
+    #swipe{
+        margin-top: 30px;
+        text-align: center;
+    }
+    #yes{
+        margin-left: 50px; 
+    }
+    .text{
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    .slideshow-container {
+        max-width: 1000px;
+        position: relative;
+        margin: auto;
+        }
+
+
+    .mySlidesfade {
+        display: none;
+    }
+
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        margin-top: -22px;
+        padding: 16px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+    .prev:hover, .next:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
+    
+    #card_text{
+        text-align: center;
+    }
+</style>
+<script defer>
+     var map;
+    var service;
+    var infowindow;
+    var myLat; 
+    var myLong; 
+    var places = []; 
+    var addresses = []; 
+    var slideIndex = 1;
+    showSlides(slideIndex);
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlidesfade");
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slideIndex-1].style.display = "block";
+    }
+
+    function onYes(){
+        console.log("It worked!"); 
+        document.querySelector('#info').style.visibility = "visible"; 
+        alert("You will receive more info. ")
+        
+    }
+    function onNo(){
+        console.log("It didn't work!");
+        alert("We're sorry that you didn't like the house. ")
+    }
+
+    function initialize() {
+    x = navigator.geolocation; 
+    x.getCurrentPosition(success); 
+
+    function success(position){
+        myLat = position.coords.latitude; 
+        myLong = position.coords.longitude;
+        initialize2(); 
+    }
+}
+initialize();
+function initialize2(){
+  var pyrmont = new google.maps.LatLng(myLat,myLong);
+  map = new google.maps.Map(document.getElementById('map'), {
+      center: pyrmont,
+      zoom: 15
+    });
+  var request = {
+    location: pyrmont,
+    radius: '250',
+    type: ['apartment']
+  };
+  service = new google.maps.places.PlacesService(map);
+  service.nearbySearch(request, callback);
+}
+
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      var place = results[i];
+      places.push(place); 
+    }
+    getHouses(places);
+  }
+}
+
+//gets the street view of all of the different places
+function getHouses(places){ 
+    var address = document.querySelector('#addresses'); 
+    for(let i = 0; i< places.length; i++){
+        var geocoder = new google.maps.Geocoder;
+        var infowindow = new google.maps.InfoWindow;
+        var placeId = places[i].vicinity;
+        addresses.push(placeId + "\n"); 
+        geocoder.geocode({'placeId': placeId}, function(results, status){
+            if (status === "OK"){
+                if(results[0]){   
+                    places[i] = results[0].geometry.location;
+            } 
+            }
+        });
+    }
+    address.innerText = addresses;
+    console.log(address);
+    var button = document.querySelector('#next'); 
+    button.style.visibility = "visible"; 
+
+    //var div = document.querySelector('#places'); 
+    //var p = "";
+    //for(let i = 0; i < addresses.length; i++){
+        //p = "" + addresses[i]; 
+        //address.innerText = "\n" + addresses[i]; 
+    //}
+    
+}
+function buttonClick(){
+        console.log("It clicked");
+        document.querySelector('#places').style.display = "none"; 
+        document.querySelector(".card").style.visibility = "visible"; 
+        document.querySelector('#inequality').innerText = "Inequality Index is a measure of inequality of the given house. When the inequality index is lower, the house is better." + "\n" + "Inequality Index: " + (Math.random()*10); 
+    }
+
+</script>
+</html>
